@@ -28,6 +28,21 @@ export const register = createAsyncThunk('auth/register', async (user, thunkAPI)
     }
 })   
 
+
+// Login user 
+export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {      // first arg is action, 
+    try {
+        return await authService.login(user)
+    } catch (error) {
+        const message = (error.response && 
+                         error.response.data && 
+                         error.response.data.message) || 
+                         error.message || 
+                         error.toString() //if any exist it will be put into variable
+        return thunkAPI.rejectWithValue(message)
+    }
+})   
+
 export const logout = createAsyncThunk('auth/logout', async () => {
     await authService.logout()
 })
@@ -59,9 +74,24 @@ export const authSlice = createSlice({
                 state.message = action.payload  //sets the message in payload that we passed in above in catch
                 state.user = null
             })
+            .addCase(login.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(login.fulfilled, (state, action) => {  // action is the payload being returned from register func
+                state.isLoading = false
+                state.isSuccess = true
+                state.user = action.payload 
+            })
+            .addCase(login.rejected, (state, action) => {
+                state.isLoading = false
+                state.isError = true
+                state.message = action.payload  //sets the message in payload that we passed in above in catch
+                state.user = null
+            })
             .addCase(logout.fulfilled, (state)=> {
                 state.user = null
             })
+            
     }
 })
 
