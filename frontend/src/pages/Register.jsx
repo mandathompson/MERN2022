@@ -1,5 +1,11 @@
 import { useState, useEffect } from 'react'
+import {useSelector, useDispatch} from 'react-redux'     // useSelector selects something from the redux state, dispatch lets us use a redux function
+import {useNavigate} from 'react-router-dom'             // to redirect
+import {toast} from 'react-toastify'
 import { FaUser } from 'react-icons/fa'
+import {register, reset} from '../features/auth/authSlice'
+import Spinner from '../components/Spinner'
+
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -11,13 +17,48 @@ const Register = () => {
 
     const {name, email, password, password2} = formData
 
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const { user, isLoading, isError, isSuccess, message } = useSelector((state)=>state.auth)  // Pulling in vars from state
+
+    useEffect(()=>{
+        if(isError){
+            toast.error(message)
+        }
+
+        if(isSuccess || user){
+            navigate('/')
+        }
+
+        dispatch(reset())
+
+    }, [user, isError, isSuccess, message, navigate, dispatch])
+
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }))
     }
-    const onSubmit = (e) => {e.preventDefault()}
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        if(password !== password2){
+            toast.error('Passwords do not match')
+        } else {
+            const userData = {
+                name, email, password
+            } //coming from the form
+
+            dispatch(register(userData))
+            // dispatch the register function with the user data
+        }
+    }
+
+    if(isLoading) {
+        return <Spinner/>
+    }
 
   return (
       <>
@@ -59,7 +100,7 @@ const Register = () => {
                         id="password" 
                         name="password" 
                         value={password} 
-                        placeholder='Enter your npassword' 
+                        placeholder='Enter your password' 
                         onChange={onChange}
                     />
                 </div>
