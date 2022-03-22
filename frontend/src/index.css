@@ -83,7 +83,7 @@ h3 {
 }
 
 .heading p {
-  color: #828282;
+  color: #ff04dd;
 }
 
 .goals {
@@ -135,9 +135,18 @@ h3 {
   margin: 0 0 5px 3px;
 }
 
+.footer {
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-top: 1px solid #e6e6e6;
+  margin-top: 360px;
+  color: #ff04dd;
+}
+
 .btn {
   padding: 10px 20px;
-  border: 1px solid #000;
+  border: 1px solid #ff04dd;
   border-radius: 5px;
   background: #000;
   color: #fff;

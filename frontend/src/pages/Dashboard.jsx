@@ -38,7 +38,7 @@ const Dashboard = () => {
     <>
     <section className="heading">
       <h1>Welcome {user && user.name}</h1>
-      <p>Goals Dashboard</p>
+      <p>Your Goals</p>
     </section>
 
     <GoalForm />
@@ -51,7 +51,7 @@ const Dashboard = () => {
           ))}
         </div>
       ) : (
-        <h3>You have not set any goals</h3>
+        <h3>Set some goals to get started</h3>
         )}
     </section>
     </>
